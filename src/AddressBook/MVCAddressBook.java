@@ -1,6 +1,6 @@
 package AddressBook;
 
-public class MVCAddressBook {
+class MVCAddressBook {
 
     public static void main(String[] args) {
 

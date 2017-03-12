@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class AddressBookView extends JFrame{
+class AddressBookView extends JFrame{
+
+    private JPanel inputs = new JPanel();
 
     private JTextField firstName = new JTextField(10);
     private JTextField lastName = new JTextField(10);
@@ -40,8 +42,6 @@ public class AddressBookView extends JFrame{
         this.setMinimumSize(new Dimension(650, 500));
         this.setTitle("Address book");
 
-        JPanel inputs = new JPanel();
-
         inputs.setBackground(new Color(200,200,200));
 
         inputs.setLayout(new GridBagLayout());
@@ -64,21 +64,21 @@ public class AddressBookView extends JFrame{
         gbc.gridy++;
         inputs.add(new JLabel("Mobile2"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("E-mail"), gbc);
+        inputs.add(new JLabel("E-mail *"), gbc);
         gbc.gridy++;
         inputs.add(new JLabel("Skype"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("Index"), gbc);
+        inputs.add(new JLabel("Index *"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("City"), gbc);
+        inputs.add(new JLabel("City *"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("Street"), gbc);
+        inputs.add(new JLabel("Street *"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("House"), gbc);
+        inputs.add(new JLabel("House *"), gbc);
         gbc.gridy++;
         inputs.add(new JLabel("Apartment"), gbc);
         gbc.gridy++;
-        inputs.add(new JLabel("Group"), gbc);
+        inputs.add(new JLabel("Group *"), gbc);
         gbc.gridy++;
         inputs.add(new JLabel("Comment"), gbc);
 
@@ -201,7 +201,7 @@ public class AddressBookView extends JFrame{
         return apartment.getText();
     }
 
-    int getGroop() {
+    int getGroup() {
 
         return group.getSelectedIndex();
     }
@@ -221,10 +221,12 @@ public class AddressBookView extends JFrame{
         buttonShowRecords.addActionListener(listener);
     }
 
-    void setGroupItems(String[] items) {
+    void setGroupItems(Object[] items) {
 
-        for (String item : items)
-            group.addItem(item);
+        for (Object item : items)
+            group.addItem(item.toString());
+
+        group.setSelectedIndex(group.getItemCount() - 1);
     }
 
     void setOutput(String text) {
@@ -232,4 +234,24 @@ public class AddressBookView extends JFrame{
         output.setText(text);
     }
 
+    void showErrorMessage(String message) {
+
+        JOptionPane.showMessageDialog(this, message,"Error!", 0);
+    }
+
+    void showMessage(String message, String title) {
+
+        JOptionPane.showMessageDialog(this, message, title, 0);
+    }
+
+    void clearAllFields() {
+
+        for (Component tf : inputs.getComponents()) {
+            if (tf.getClass().toString().equals("class javax.swing.JTextField"))
+                ((JTextField) tf).setText("");
+
+            if (tf.getClass().toString().equals("class javax.swing.JTextArea"))
+                ((JTextArea) tf).setText("");
+        }
+    }
 }

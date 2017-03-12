@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 class AddressBookModel {
 
-    ArrayList<AddressBookRecord> addressBookList;
+    private ArrayList<AddressBookRecord> addressBookList;
 
 
 
@@ -31,6 +31,13 @@ class AddressBookModel {
         }
 
         return returnStr;
+    }
+
+    String lastRecord() {
+
+        int lastIndex = addressBookList.size();
+        return "Record " + lastIndex +
+                ":\n" + addressBookList.get(lastIndex - 1).toString() + "\n";
     }
 }
 
