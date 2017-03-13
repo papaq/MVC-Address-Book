@@ -1,5 +1,8 @@
 package AddressBook;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.time.LocalDateTime;
 
 class AddressBookRecord {
@@ -46,7 +49,24 @@ class AddressBookRecord {
         this.comment = comment;
         this.group = Groups.values()[group];
         dateCreated = LocalDateTime.now();
-        dateChanged = LocalDateTime.now();
+        dateChanged = dateCreated;
+    }
+
+    LocalDateTime getDateCreated() {
+
+        return dateCreated;
+    }
+
+    void setDateCreated(LocalDateTime date) {
+
+        dateCreated = date;
+    }
+
+    boolean match(AddressBookRecord recordTemplate) {
+
+        return this.firstName.toLowerCase().matches(recordTemplate.firstName) &&
+                this.lastName.toLowerCase().matches(recordTemplate.lastName) &&
+                this.email.toLowerCase().matches(recordTemplate.email);
     }
 
     @Override
@@ -68,68 +88,48 @@ class AddressBookRecord {
     @Override
     public boolean equals(Object obj) {
 
-        if (obj == null) return false;
-
-        if (!Address.class.isAssignableFrom(obj.getClass())) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
             return false;
         }
 
         AddressBookRecord other = (AddressBookRecord)obj;
 
-        if (obj == this) return true;
+        return new EqualsBuilder()
+                .append(firstName, other.firstName)
+                .append(lastName, other.lastName)
+                .append(email, other.email)
+                .isEquals();
+    }
 
-        if (this.firstName == null ? other.firstName != null : !this.firstName.equals(other.firstName))
-            return false;
-
-        if (this.lastName == null ? other.lastName != null : !this.lastName.equals(other.lastName))
-            return false;
-
-        if (this.nickName == null ? other.nickName != null : !this.nickName.equals(other.nickName))
-            return false;
-
-        if (this.homeNumber == null ? other.homeNumber != null : !this.homeNumber.equals(other.homeNumber))
-            return false;
-
-        if (this.mobile == null ? other.mobile != null : !this.mobile.equals(other.mobile))
-            return false;
-
-        if (this.mobile2 == null ? other.mobile2 != null : !this.mobile2.equals(other.mobile2))
-            return false;
-
-        if (this.email == null ? other.email != null : !this.email.equals(other.email))
-            return false;
-
-        if (this.skype == null ? other.skype != null : !this.skype.equals(other.skype))
-            return false;
-
-        if (this.address == null ? other.address != null : !this.address.equals(other.address))
-            return false;
-
-        if (this.dateCreated == null ? other.dateCreated != null : !this.dateCreated.equals(other.dateCreated))
-            return false;
-
-        if (this.dateChanged == null ? other.dateChanged != null : !this.dateChanged.equals(other.dateChanged))
-            return false;
-
-        if (this.group == null ? other.group != null : !this.group.equals(other.group))
-            return false;
-
-        if (this.comment == null ? other.comment != null : !this.comment.equals(other.comment))
-            return false;
-
-        return true;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 87).
+                append(firstName).
+                append(lastName).
+                append(nickName).
+                append(homeNumber).
+                append(mobile).
+                append(mobile2).
+                append(email).
+                append(skype).
+                append(address).
+                append(group).
+                append(comment).
+                toHashCode();
     }
 }
 
-class Address {
+class Address  {
 
     private String index;
     private String city;
     private String street;
     private String house;
-    private Integer apartment;
+    private String apartment;
 
-    Address(String index, String city, String street, String house, Integer apartment) {
+    Address(String index, String city, String street, String house, String apartment) {
 
         this.index = index;
         this.city = city;
@@ -148,31 +148,31 @@ class Address {
     @Override
     public boolean equals(Object obj) {
 
-        if (obj == null) return false;
-
-        if (!Address.class.isAssignableFrom(obj.getClass())) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
             return false;
         }
 
         Address other = (Address)obj;
 
-        if (obj == this) return true;
+        return new EqualsBuilder()
+                .append(index, other.index)
+                .append(city, other.city)
+                .append(street, other.street)
+                .append(house, other.house)
+                .append(apartment, other.apartment)
+                .isEquals();
+    }
 
-        if (this.index == null ? other.index != null : !this.index.equals(other.index))
-            return false;
-
-        if (this.city == null ? other.city != null : !this.city.equals(other.city))
-            return false;
-
-        if (this.street == null ? other.street != null : !this.street.equals(other.street))
-            return false;
-
-        if (this.house == null ? other.house != null : !this.house.equals(other.house))
-            return false;
-
-        if (this.apartment == null ? other.apartment != null : !this.apartment.equals(other.apartment))
-            return false;
-
-        return true;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(23, 47).
+                append(index).
+                append(city).
+                append(street).
+                append(house).
+                append(apartment).
+                toHashCode();
     }
 }

@@ -3,6 +3,7 @@ package AddressBook;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class AddressBookController {
 
@@ -15,34 +16,62 @@ class AddressBookController {
         this.model = model;
 
         ArrayList groupList = new ArrayList();
-        for (AddressBookRecord.Groups group : AddressBookRecord.Groups.values())
-            groupList.add(group);
+        Collections.addAll(groupList, AddressBookRecord.Groups.values());
 
         this.view.setGroupItems(groupList.toArray());
+
         this.view.setAddButtonListener(new AddNewRecord());
         this.view.setShowButtonListener(new ShowRecords());
     }
 
-    private class AddNewRecord implements ActionListener {
+    private abstract class ButtonBase implements ActionListener {
+
+        String fName;
+        String lName;
+        String nName;
+        String hNumber;
+        String mobile;
+        String mobile2;
+        String email;
+        String skype;
+        String index;
+        String city;
+        String street;
+        String house;
+        String apartment;
+        String comment;
+        int group;
+
+        @Override
+        public abstract void actionPerformed(ActionEvent e);
+
+        void getTextFields() {
+
+            fName = view.getFirstName().trim();
+            lName = view.getLastName().trim();
+            nName = view.getNickame().trim();
+            hNumber = view.getHomeNumber().trim().replaceAll("\\)|\\(|-|\\+", "");
+            mobile = view.getMobile().trim().replaceAll("\\)|\\(|-|\\+", "");
+            mobile2 = view.getMobile2().trim().replaceAll("\\)|\\(|-|\\+", "");
+            email = view.getEMail().trim().toLowerCase();
+            skype = view.getSkype().trim();
+            index = view.getIndex().trim().replace("-", "");
+            city = view.getCity().trim();
+            street = view.getStreet().trim();
+            house = view.getHouse().trim();
+            apartment = view.getApartment().trim();
+            comment = view.getComment().trim();
+            group = view.getGroup();
+        }
+
+    }
+
+    private class AddNewRecord extends ButtonBase {
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
-            String fName = view.getFirstName().trim();
-            String lName = view.getLastName().trim();
-            String nName = view.getNickame().trim();
-            String hNumber = view.getHomeNumber().trim().replaceAll("\\)|\\(|-|\\+", "");
-            String mobile = view.getMobile().trim().replaceAll("\\)|\\(|-|\\+", "");
-            String mobile2 = view.getMobile2().trim().replaceAll("\\)|\\(|-|\\+", "");
-            String email = view.getEMail().trim();
-            String skype = view.getSkype().trim();
-            String index = view.getIndex().trim().replace("-", "");
-            String city = view.getCity().trim();
-            String street = view.getStreet().trim();
-            String house = view.getHouse().trim();
-            String apartment = view.getApartment().trim();
-            String comment = view.getComment().trim();
-            int group = view.getGroup();
+            getTextFields();
 
 
             if (fName.isEmpty() || !fName.matches("[A-Z]([a-z]*-[A-Z]+)*[a-z]*")) {
@@ -81,7 +110,7 @@ class AddressBookController {
                 return;
             }
 
-            if (email.isEmpty() || !email.matches("[_a-zA-Z]\\w*@[a-zA-Z]+\\.[a-zA-Z]+")) {
+            if (email.isEmpty() || !email.matches("[_a-z]([a-z]*|_[a-z]|\\.[a-z])*@[a-z]+\\.[a-z]+")) {
 
                 view.showErrorMessage("There is a mistake in E-mail!");
                 return;
@@ -128,32 +157,62 @@ class AddressBookController {
             AddressBookRecord record = new AddressBookRecord(
                     fName, lName, nName, hNumber, mobile, mobile2, email, skype,
                     new Address(
-                            index, city, street, house,
-                            apartment.isEmpty() ? null : Integer.parseInt(apartment)),
+                            index, city, street, house, apartment),
                     comment, group);
 
             // Check if already exists
-            /*
-            if () {
+            if (model.contains(record)) {
 
+                AddressBookRecord updatedRecord = model.update(record);
+                view.setOutput(updatedRecord.toString());
+
+                view.showMessage("Record was successfully updated!", "Attention!");
                 return;
             }
-            */
 
             model.addNewRecord(record);
 
-            view.setOutput(model.lastRecord());
+            view.setOutput(record.toString());
 
-            view.clearAllFields();
+            //view.clearAllFields();
         }
     }
 
-    private class ShowRecords implements ActionListener {
+    private class ShowRecords extends ButtonBase {
 
 
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            getTextFields();
+
+            String templateAll = ".*";
+
+            AddressBookRecord recordTemplate = new AddressBookRecord(
+                    fName.concat(templateAll), lName.concat(templateAll),
+                    nName.concat(templateAll), hNumber.concat(templateAll),
+                    mobile.concat(templateAll), mobile2.concat(templateAll),
+                    email.concat(templateAll), skype.concat(templateAll),
+                    new Address(
+                            index.concat(templateAll), city.concat(templateAll),
+                            street.concat(templateAll), house.concat(templateAll),
+                            apartment),
+                    comment.concat(templateAll), group);
+
+            ArrayList listOfMatches = model.getAllMatches(recordTemplate);
+
+            StringBuilder outStr = new StringBuilder("");
+            int i = 0;
+
+            for (Object record : listOfMatches) {
+
+                i++;
+                outStr.append("Match ").append(i).append(":\n").append(record).append("\n\n");
+            }
+
+            view.showMessage("Found " + i + " matches!", "Attention!");
+
+            view.setOutput(outStr.toString());
         }
     }
 

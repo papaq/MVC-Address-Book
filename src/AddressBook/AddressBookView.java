@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 
 class AddressBookView extends JFrame{
 
-    private JPanel inputs = new JPanel();
-
     private JTextField firstName = new JTextField(10);
     private JTextField lastName = new JTextField(10);
     private JTextField nickName = new JTextField(10);
@@ -42,6 +40,7 @@ class AddressBookView extends JFrame{
         this.setMinimumSize(new Dimension(650, 500));
         this.setTitle("Address book");
 
+        JPanel inputs = new JPanel();
         inputs.setBackground(new Color(200,200,200));
 
         inputs.setLayout(new GridBagLayout());
@@ -244,6 +243,7 @@ class AddressBookView extends JFrame{
         JOptionPane.showMessageDialog(this, message, title, 0);
     }
 
+    /*
     void clearAllFields() {
 
         for (Component tf : inputs.getComponents()) {
@@ -254,4 +254,5 @@ class AddressBookView extends JFrame{
                 ((JTextArea) tf).setText("");
         }
     }
+    */
 }

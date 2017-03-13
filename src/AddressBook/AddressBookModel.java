@@ -7,8 +7,6 @@ class AddressBookModel {
 
     private ArrayList<AddressBookRecord> addressBookList;
 
-
-
     AddressBookModel() {
 
         addressBookList = new ArrayList<>();
@@ -17,6 +15,44 @@ class AddressBookModel {
     void addNewRecord(AddressBookRecord record) {
 
         addressBookList.add(record);
+    }
+
+    boolean contains(AddressBookRecord newRecord) {
+
+        for (AddressBookRecord record : addressBookList) {
+            if (record.equals(newRecord)) return true;
+        }
+
+        return false;
+    }
+
+    AddressBookRecord update(AddressBookRecord newRecord) {
+
+        for (AddressBookRecord record : addressBookList) {
+            if (record.equals(newRecord)) {
+
+                newRecord.setDateCreated(record.getDateCreated());
+                record = newRecord;
+                return record;
+            }
+        }
+
+        return null;
+    }
+
+    ArrayList getAllMatches(AddressBookRecord recordTemplate) {
+
+        ArrayList listOfRecords = new ArrayList();
+
+        for (AddressBookRecord record : addressBookList) {
+
+            if (record.match(recordTemplate)) {
+
+                listOfRecords.add(record.toString());
+            }
+        }
+
+        return listOfRecords;
     }
 
     @Override
@@ -31,13 +67,6 @@ class AddressBookModel {
         }
 
         return returnStr;
-    }
-
-    String lastRecord() {
-
-        int lastIndex = addressBookList.size();
-        return "Record " + lastIndex +
-                ":\n" + addressBookList.get(lastIndex - 1).toString() + "\n";
     }
 }
 
