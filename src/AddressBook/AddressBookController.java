@@ -42,9 +42,6 @@ class AddressBookController {
         String comment;
         int group;
 
-        @Override
-        public abstract void actionPerformed(ActionEvent e);
-
         void getTextFields() {
 
             fName = view.getFirstName().trim();
@@ -64,6 +61,11 @@ class AddressBookController {
             group = view.getGroup();
         }
 
+        Boolean stringIsInvalid(String str, Boolean extraCondition, String matchExpression) {
+
+            return extraCondition || !str.matches(matchExpression);
+
+        }
     }
 
     private class AddNewRecord extends ButtonBase {
@@ -74,79 +76,79 @@ class AddressBookController {
             getTextFields();
 
 
-            if (fName.isEmpty() || !fName.matches("[A-Z]([a-z]*-[A-Z]+)*[a-z]*")) {
+            if (stringIsInvalid(fName, fName.isEmpty(), "[A-Z]([a-z]*-[A-Z]+)*[a-z]*")) {
 
                 view.showErrorMessage("There is a mistake in First name!");
                 return;
             }
 
-            if (lName.isEmpty() || !lName.matches("[A-Z]([a-z]*-[A-Z]+)*[a-z]*")) {
+            if (stringIsInvalid(lName, lName.isEmpty(),"[A-Z]([a-z]*-[A-Z]+)*[a-z]*")) {
 
                 view.showErrorMessage("There is a mistake in Last name!");
                 return;
             }
 
-            if (!nName.isEmpty() && !nName.matches("[_a-zA-Z]\\w*")) {
+            if (stringIsInvalid(nName, !nName.isEmpty(),"[_a-zA-Z]\\w*")) {
 
                 view.showErrorMessage("There is a mistake in Nickname!");
                 return;
             }
 
-            if (!hNumber.isEmpty() && !hNumber.matches("\\d+")) {
+            if (stringIsInvalid(hNumber, !hNumber.isEmpty(), "\\d+")) {
 
                 view.showErrorMessage("There is a mistake in Home number!");
                 return;
             }
 
-            if (!mobile.isEmpty() && !mobile.matches("\\d+")) {
+            if (stringIsInvalid(mobile, !mobile.isEmpty(), "\\d+")) {
 
                 view.showErrorMessage("There is a mistake in Mobile!");
                 return;
             }
 
-            if (!mobile2.isEmpty() && !mobile2.matches("\\d+")) {
+            if (stringIsInvalid(mobile2, !mobile2.isEmpty(), "\\d+")) {
 
                 view.showErrorMessage("There is a mistake in Mobile2!");
                 return;
             }
 
-            if (email.isEmpty() || !email.matches("[_a-z]([a-z]*|_[a-z]|\\.[a-z])*@[a-z]+\\.[a-z]+")) {
+            if (stringIsInvalid(email, email.isEmpty(),"[_a-z]([a-z]*|_[a-z]|\\.[a-z])*@[a-z]+\\.[a-z]+")) {
 
                 view.showErrorMessage("There is a mistake in E-mail!");
                 return;
             }
 
-            if (!skype.isEmpty() && !skype.matches("[_a-zA-Z](\\w|\\.\\w)*")) {
+            if (stringIsInvalid(skype, !skype.isEmpty(), "[_a-zA-Z](\\w|\\.\\w)*")) {
 
                 view.showErrorMessage("There is a mistake in Skype!");
                 return;
             }
 
-            if (index.isEmpty() || !index.matches("[0-9a-zA-Z]+")) {
+            if (stringIsInvalid(index, index.isEmpty(), "[0-9a-zA-Z]+")) {
 
                 view.showErrorMessage("There is a mistake in Index!");
                 return;
             }
 
-            if (city.isEmpty() || !city.matches("[A-Z][a-z]*")) {
+            if (stringIsInvalid(index, index.isEmpty(), "[A-Z][a-z]*")) {
 
                 view.showErrorMessage("There is a mistake in City!");
                 return;
             }
 
-            if (street.isEmpty() || !street.matches("([A-Za-z]|[A-Za-z]\\.? ?)+")) {
+            if (stringIsInvalid(street, street.isEmpty(), "([A-Za-z]|[A-Za-z]\\.? ?)+")) {
 
                 view.showErrorMessage("There is a mistake in Street!");
                 return;
             }
 
-            if (house.isEmpty() || !house.matches("\\d+[a-zA-Z]?")) {
+            if (stringIsInvalid(house, house.isEmpty(), "\\d+[a-zA-Z]?")) {
 
                 view.showErrorMessage("There is a mistake in House!");
                 return;
             }
 
-            if (!apartment.isEmpty() && !apartment.matches("\\d+[a-zA-Z]?")) {
+            if (stringIsInvalid(apartment, !apartment.isEmpty(), "\\d+[a-zA-Z]?")) {
 
                 view.showErrorMessage("There is a mistake in Apartment!");
                 return;

@@ -64,9 +64,9 @@ class AddressBookRecord {
 
     boolean match(AddressBookRecord recordTemplate) {
 
-        return this.firstName.toLowerCase().matches(recordTemplate.firstName) &&
-                this.lastName.toLowerCase().matches(recordTemplate.lastName) &&
-                this.email.toLowerCase().matches(recordTemplate.email);
+        return this.firstName.toLowerCase().matches(recordTemplate.firstName.toLowerCase()) &&
+                this.lastName.toLowerCase().matches(recordTemplate.lastName.toLowerCase()) &&
+                this.email.toLowerCase().matches(recordTemplate.email.toLowerCase());
     }
 
     @Override
